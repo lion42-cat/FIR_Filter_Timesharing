@@ -1,0 +1,83 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+module Multiplier_module(clk, rst, input0, input1, input2, input3, input4, input5, input6, input7, 
+output0, output1, output2, output3, output4, output5, output6, output7);
+input clk, rst;
+input [15:0] input0, input1, input2, input3, input4, input5, input6, input7;
+output [15:0] output0, output1, output2, output3, output4, output5, output6, output7;
+
+reg [15:0] b[7:0]; // coefficient
+
+wire [15:0] in_data [7:0];
+reg [15:0] out_data [7:0];
+
+reg [4:0] count;
+
+integer i;
+
+//coefficient
+always @ (posedge clk)
+begin
+	if(rst == 1)
+		begin
+			for(i=0; i<=7; i=i+1)
+				b[i] = 0;
+		end
+	else
+		begin
+			b[0] = 16'd0001;
+			b[1] = 16'd0002;
+			b[2] = 16'd0003;
+			b[3] = 16'd0004;
+			b[4] = 16'd0005;
+			b[5] = 16'd0006;
+			b[6] = 16'd0007;
+			b[7] = 16'd0008;
+		end
+end
+
+assign in_data[0] = input0;
+assign in_data[1] = input1;
+assign in_data[2] = input2;
+assign in_data[3] = input3;
+assign in_data[4] = input4;
+assign in_data[5] = input5;
+assign in_data[6] = input6;
+assign in_data[7] = input7;
+
+//Multiplier
+always @ (*)
+begin
+	if(rst == 1)
+		begin
+			for(i = 0; i<=7; i=i+1)
+				out_data[i]=0;
+		end
+	else
+			out_data[count] = in_data[count]*b[count];
+end
+
+assign output0 = out_data[0];
+assign output1 = out_data[1];
+assign output2 = out_data[2];
+assign output3 = out_data[3];
+assign output4 = out_data[4];
+assign output5 = out_data[5];
+assign output6 = out_data[6];
+assign output7 = out_data[7];
+
+// counter
+always @ (posedge clk)
+begin
+	if(rst == 1)
+		count <= 0;
+	else
+		begin
+			if(count<=6)
+				count <= count + 1;
+			else
+				count <= 0;
+		end
+end
+
+endmodule
