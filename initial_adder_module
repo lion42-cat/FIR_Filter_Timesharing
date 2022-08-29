@@ -1,0 +1,69 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+module initial_adder_module(clk, rst, data_in, mac0, mac1, mac2, mac3, mac4, mac5, mac6, mac7);
+input clk, rst;
+input [15:0] data_in;
+output [15:0] mac0, mac1, mac2, mac3, mac4, mac5, mac6, mac7;
+
+reg [15:0] xn [15:0]; // 앞의 15:0크기 배열이 8개있음
+reg [15:0] mac0, mac1, mac2, mac3, mac4, mac5, mac6, mac7;
+
+integer i;
+
+//xn
+always @ (posedge clk)
+begin
+	if(rst == 1)
+		begin
+			for(i=0; i<=15; i=i+1)
+					xn[i] = 0;
+		end
+	else
+		begin
+			xn[0] <= data_in;
+			xn[1] <= xn[0];
+			xn[2] <= xn[1];
+			xn[3] <= xn[2];
+			xn[4] <= xn[3];
+			xn[5] <= xn[4];
+			xn[6] <= xn[5];
+			xn[7] <= xn[6];
+			xn[8] <= xn[7];
+			xn[9] <= xn[8];
+			xn[10] <= xn[9];
+			xn[11] <= xn[10];
+			xn[12] <= xn[11];
+			xn[13] <= xn[12];
+			xn[14] <= xn[13];
+			xn[15] <= xn[14];
+		end
+end
+
+//mac
+always @ (posedge clk)
+begin
+	if(rst == 1)
+		begin
+			mac0 <= 0;
+			mac1 <= 0;
+			mac2 <= 0;
+			mac3 <= 0;
+			mac4 <= 0;
+			mac5 <= 0;
+			mac6 <= 0;
+			mac7 <= 0;
+		end
+	else
+		begin
+			mac0 <= xn[0] + xn[15];
+			mac1 <= xn[1] + xn[14];
+			mac2 <= xn[2] + xn[13];
+			mac3 <= xn[3] + xn[12];
+			mac4 <= xn[4] + xn[11];
+			mac5 <= xn[5] + xn[10];
+			mac6 <= xn[6] + xn[9];
+			mac7 <= xn[7] + xn[8];
+		end
+end
+
+endmodule
